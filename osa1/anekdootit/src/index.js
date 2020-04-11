@@ -24,20 +24,32 @@ const Button = (props) => {
 const App = (props) => {
   const [selected, setSelected] = useState(0)
   const [list, setList] = useState(new Array(anecdotes.length).fill(0))
+  
 
   const voteFor = () => {
     let copy = [...list];
     copy[selected] += 1;
     setList(copy);
-    console.log(list[0] + " " + list[1] + " " + list[2] +" " + list[3] + " " + list[4] + " " + list[5])
+
   }
+
+  const highestVote = () => {
+    let num = list.indexOf(Math.max(...list));
+    return num;
+  }
+
+  const [popular, setPopular] = useState(highestVote())
 
   return (
     <div>
+      <h2>Anecdote of the day</h2>
       {props.anecdotes[selected]}
       <p>has {list[selected]} votes</p>
       <Button whenclick = {voteFor} text = {"vote"}/>
-      <Button whenclick = {() => setSelected(changeAnecdote())} text = {"next anecdote"}/>
+      <Button whenclick = {() => {setSelected(changeAnecdote()); setPopular(highestVote()); }} text = {"next anecdote"}/>
+      <h2>Anecdote with the most votes</h2>
+      {props.anecdotes[popular]}
+      <p>has {list[popular]} votes</p>
     </div>
   )
 }
