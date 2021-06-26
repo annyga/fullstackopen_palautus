@@ -18,10 +18,10 @@ const PersonForm = (props) => {
     <div>
       <form>
         <div>
-          name: <input onChange = {props.handlechange}/>
+          name: <input id="nameinput" onChange = {props.handlechange}/>
           </div>
           <div> 
-          number: <input onChange = {props.handlenumChange}/>
+          number: <input id="numberinput" onChange = {props.handlenumChange}/>
           </div> 
         <div>
           <button type="submit" onClick = {props.logname}>add</button>
@@ -93,21 +93,26 @@ const App = () => {
     event.preventDefault();
     let pers = {name: newName, number: newNumber};
     let isInList = false;
+    let idNum;
 
     for (let item of persons){
+      console.log(item.name === pers.name)
       if (item.name === pers.name){
         isInList = true;
-        pers = {name:item.name, number: newNumber, id: item.id};
+        idNum = item.id;
+        pers = {name:item.name, number: newNumber};
         break;                    
       }
     }
-
+    //if it is a new person
     if (!isInList){
       noteService.create(pers)
       .then( (response) => {
         console.log(response)
         setPersons(persons.concat(response.data));
         setMessage("added " + pers.name);
+        document.getElementById('nameinput').value = "";
+        document.getElementById('numberinput').value = "";
         setTimeout(() => {
           setMessage(null);
         }, 5000);
@@ -118,15 +123,17 @@ const App = () => {
       
       
       //this is for updating person
-    }else{
+    }else if(isInList){
       if (window.confirm("Do you want to update this person?")){
-        noteService.modify(pers.id, pers)
+        noteService.modify(idNum, pers)
         .then( (response) => {
           console.log(response.data)
           noteService.getAll()
           .then( (response) => {
             setPersons(response.data);
             setMessage("updated " + pers.name);
+            document.getElementById('nameinput').value = "";
+            document.getElementById('numberinput').value = "";
             setTimeout(() => {
               setMessage(null);
             }, 5000);
@@ -139,6 +146,8 @@ const App = () => {
           console.log(error.message)
           setKlass("negmsg");
           setMessage(`information of ${pers.name} was already removed from server`);
+          document.getElementById('nameinput').value = "";
+          document.getElementById('numberinput').value = "";
           setTimeout(() => {
             setMessage(null);
             setKlass("msg");
@@ -149,6 +158,8 @@ const App = () => {
         })
       }else{
         console.log("no updating")
+        document.getElementById('nameinput').value = "";
+        document.getElementById('numberinput').value = "";
       }
     }
 

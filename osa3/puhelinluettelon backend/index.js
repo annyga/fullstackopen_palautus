@@ -1,9 +1,10 @@
 
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 
 const app = express();
-
+app.use(cors());
 
 morgan.token('reqbodyname', function (req, res) { 
 
@@ -48,6 +49,11 @@ let persons = [
         "name": "Mary Poppendieck",
         "number": "39-23-6423122"
         
+      },
+      {
+        "id": 5,
+        "name": "wer",
+        "number": "868-9871117"
       }
 ]
 
@@ -104,6 +110,22 @@ app.delete("/api/persons/:id", (req, res) => {
     persons = persons.filter( item => item.id !== Number(req.params.id))
 
     res.sendStatus(204).end();
+})
+
+app.put("/api/persons/:id" , (req, res) => {
+    let id = Number(req.params.id);
+    let newMan = {
+        "id": id,
+        "name" :req.body.name,
+        "number" : req.body.number
+    }
+    console.log(newMan);
+    persons = persons.filter( item => item.id !== id)
+    persons.push(newMan)
+    
+    res.sendStatus(204).end();
+
+    
 })
 
 
