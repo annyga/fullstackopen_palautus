@@ -12,6 +12,7 @@ const loginRouter = require('./controllers/login')
 
 
 
+
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
 app.use(cors())
@@ -25,5 +26,10 @@ app.use('/api/blogs',  blogsRouter);
 app.use('/api/users', userRouter);
 
 app.use('/api/login', loginRouter);
+
+if (process.env.NODE_ENV === 'test') {
+    const testRouter = require('./controllers/tests')
+    app.use('/api/testing', testRouter)
+  }
 
 module.exports = app;

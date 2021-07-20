@@ -31,7 +31,7 @@ blogsRouter.post('/', middleware.userExtractor, async(req, res, next) => {
           }
     
         const user = req.user
-    
+        
         const blog = new Blog({
             title: req.body.title,
             author: req.body.author,
@@ -40,9 +40,9 @@ blogsRouter.post('/', middleware.userExtractor, async(req, res, next) => {
             user : user._id
     
         })
-    
-        if(blog.title === null || blog.url === null){
-            res.sendStatus(400)
+        
+        if(blog.title === '' || blog.url === ''){
+            res.sendStatus(400).end()
         }else{
             savedBlog = await blog.save()
             
