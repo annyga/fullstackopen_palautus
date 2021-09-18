@@ -10,8 +10,8 @@ const pubsub = new PubSub()
 
 
 
-const MONGODB_URI = 'mongodb+srv://dbUser:police21@cluster0.u9b7f.mongodb.net/LibraryDb?retryWrites=true&w=majority'
-const JWT_SECRET = 'SPAGHETTI'
+const MONGODB_URI = `mongodb+srv://dbUser:${process.env.MONGOPASSWORD}@cluster0.u9b7f.mongodb.net/LibraryDb?retryWrites=true&w=majority`
+const JWT_SECRET = process.env.SECRET;
 console.log('connecting to', MONGODB_URI)
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
